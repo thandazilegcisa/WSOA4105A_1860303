@@ -1,5 +1,5 @@
 const button = document.querySelector('button');
 
-button.addEventListener('onmousedown', event => {
-    button.textContent = `Click count: ${event.detail}`;
+button.addEventListener('mousedown', event => {
+    console.log(event);
 });
