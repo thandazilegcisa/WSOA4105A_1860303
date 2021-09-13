@@ -26,7 +26,11 @@ var handleOrientationEvent = function (frontToBack, leftToRight, rotateDegrees) 
     console.log(frontToBack + ':' + leftToRight + ':' + rotateDegrees);
 };
 */
-
+/*
 window.addEventListener('devicemotion', function (event) {
     console.log(event.acceleration.x + 'm/s2');
+});
+*/
+window.addEventListener('deviceorientation', function (event) {
+    console.log(event.alpha + ":" + event.beta + ":" + event.gamma);
 });
