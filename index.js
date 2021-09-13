@@ -32,5 +32,5 @@ window.addEventListener('devicemotion', function (event) {
 });
 */
 window.addEventListener('deviceorientation', function (event) {
-    console.log(event.alpha + ":" + event.beta + ":" + event.gamma);
+    console.log(event.beta + ":" + event.alpha + ":" + event.gamma);
 });
