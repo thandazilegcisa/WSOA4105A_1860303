@@ -5,7 +5,7 @@ var output = document.querySelector('.output');
 var maxX = garden.clientWidth - ball.clientWidth;
 var maxY = garden.clientHeight - ball.clientHeight;
 
-function handleOrientation(event) {
+window.ondeviceorientation = function handleOrientation(event) {
     var x = event.beta;  // In degree in the range [-180,180)
     var y = event.gamma; // In degree in the range [-90,90)
 
@@ -26,6 +26,9 @@ function handleOrientation(event) {
     // It center the positioning point to the center of the ball
     ball.style.top = (maxY * y / 180 - 10) + "px";
     ball.style.left = (maxX * x / 180 - 10) + "px";
+
+    console.log(x);
+    console.log(y);
 }
 
-window.addEventListener('deviceorientation', handleOrientation);
+
