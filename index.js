@@ -18,5 +18,5 @@ if (window.DeviceOrientationEvent) {
 
 var handleOrientationEvent = function (frontToBack, leftToRight, rotateDegrees) {
     // do something amazing
-    console.log(event.alpha + ':' + event.beta + ':' + event.gamma);
+    console.log(frontToBack + ':' + leftToRight + ':' + rotateDegrees);
 };
