@@ -31,6 +31,6 @@ window.addEventListener('devicemotion', function (event) {
     console.log(event.acceleration.x + 'm/s2');
 });
 */
-window.addEventListener('deviceorientation', function (event) {
+window.addEventListener('ondeviceorientation', function (event) {
     console.log(event.beta + ":" + event.alpha + ":" + event.gamma);
 });
