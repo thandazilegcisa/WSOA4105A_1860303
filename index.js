@@ -33,4 +33,4 @@ window.addEventListener('devicemotion', function (event) {
 */
 window.addEventListener('ondeviceorientation', function (event) {
     console.log(event.beta + ":" + event.alpha + ":" + event.gamma);
-});
+}, true);
