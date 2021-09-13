@@ -4,6 +4,9 @@ window.addEventListener('deviceorientation', function (event) {
 });
 */
 if (window.DeviceOrientationEvent) {
+
+    console.log("Device is compatible");
+
     window.addEventListener("deviceorientation", function (event) {
         // alpha: rotation around z-axis
         var rotateDegrees = event.alpha;
