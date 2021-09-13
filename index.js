@@ -3,6 +3,8 @@ window.addEventListener('deviceorientation', function (event) {
     console.log(event.alpha + ':' + event.beta + ':' + event.gamma);
 });
 */
+
+/*
 if (window.DeviceOrientationEvent) {
 
     console.log("Device is compatible");
@@ -23,3 +25,8 @@ var handleOrientationEvent = function (frontToBack, leftToRight, rotateDegrees) 
     // do something amazing
     console.log(frontToBack + ':' + leftToRight + ':' + rotateDegrees);
 };
+*/
+
+window.addEventListener('devicemotion', function (event) {
+    console.log(event.acceleration.x + 'm/s2');
+});
