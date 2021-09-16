@@ -37,7 +37,7 @@ window.addEventListener('ondeviceorientation', function (event) {
     console.log(event.beta + ":" + event.alpha + ":" + event.gamma);
 }, true);
 */
-
+/*
 let sensor = new Gyroscope();
 sensor.start();
 
@@ -48,3 +48,8 @@ sensor.onreading = () => {
 };
 
 sensor.onerror = event => console.log(event.error.name, event.error.message);
+*/
+
+window.addEventListener('deviceorientation', function(event){
+    console.info(`alpha: ${event.alpha} beta: ${event.beta} gamma: ${event.gamma}`)
+});
