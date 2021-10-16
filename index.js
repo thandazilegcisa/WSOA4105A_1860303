@@ -99,6 +99,8 @@ function droneAudio (){
        osc.connect(volume).connect(audioCtx.destination);
 
 }
+var startOffset = 0;
+var startTime = 0;
 
 function loadSnare(){
     let audio = new Audio("Hollow Direct Punchy Snare.wav");
@@ -108,6 +110,13 @@ function loadSnare(){
 
     audio.play();
 }
+startButton.addEventListener("click", function(){
+    if(audioCtx.state === "suspended"){
+        audioCtx.resume();
+    }
+
+    droneAudio();
+});
 
 // This function listens or rather uses the accelerometer api 
 let acl = new Accelerometer();
@@ -120,31 +129,29 @@ acl.addEventListener("reading", function(event){
         
         // This visualizes the values on the screen
 
-        document.getElementById('x').innerHTML = 'x: ' + event.target.x;
+        document.getElementById('x').innerHTML = 'x: ' + Math.abs(event.target.x);
         document.getElementById('y').innerHTML = 'y: ' + event.target.y;
         document.getElementById('z').innerHTML = 'z: ' + event.target.z;
 
         sendSensorData(checkPosition(event.target));
 
-        if(audioCtx.state === "suspended"){
-            audioCtx.resume();
-        }
     }
 });
 function isAtPosition(refPosition, newPosition){
+
     return( 
         isSomeWhatEqual(refPosition.x, newPosition.x ) && 
         isSomeWhatEqual(refPosition.y, newPosition.y ) && 
         isSomeWhatEqual(refPosition.z, newPosition.z ) 
-    )
+    );
 }
 
 function isSomeWhatEqual(num1, num2){
-    let offset = 2.5;
+    let offset = 4.5;
 
     // return absolute value because the api return 
     // values that have decimal points 
-    return (Math.abs(num1 -num2) <= offset)
+    return (Math.abs(num1 -num2) <= offset);
 }
 
  // This checks for the Position of the device sets and 
@@ -191,7 +198,7 @@ function checkPosition(position){
  acl.start();
 
 function sendSensorData(data){
-    if(data.includes("ERROR"))
+    if(data.includes("ERROR")) return;
     
     switch(data){
         case "leftTilt": droneAudio();  console.log("audioTilt"); break; 
