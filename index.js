@@ -1,3 +1,5 @@
+//alert("Press start to start audio context")
+
 //Retrieve Html Elements:
 const startButton = document.querySelector(".button-One");
 
@@ -28,13 +30,23 @@ const referencePositions = {
         y: -10,
         z: 0
     },
+    halfRightTilt:{
+        x:-5,
+        y:0,
+        z:0
+    },
     rightTilt   : {
-        x: -10,
+        x: -9.5,
         y: 0,
         z: 0
     },
+    halfLeftTilt: {
+        x:5,
+        y:0,
+        z:0
+    },
     leftTilt    : {
-        x: 10,
+        x: 9.5,
         y: 0,
         z: 0
     },
@@ -58,7 +70,9 @@ const phoneOrientations = Object.freeze({
     faceDown    : 'faceDown    ',
     straightUp  : 'straightUp  ',
     upsideDown  : 'upsideDown  ',
+    halfRightTilt: 'halfRightTilt',
     rightTilt   : 'rightTilt   ',
+    halfLeftTilt: 'halfLeftTilt',
     leftTilt    : 'leftTilt    ',
     leanTowards : 'leanTowards ',
     leanAway    : 'leanAway    '
@@ -67,18 +81,44 @@ const phoneOrientations = Object.freeze({
 // Initialises the position of the phone to the origin position 
 let previousPosition = referencePositions.origin;
 
-// This creates the initial pitch theremin frequency and volume values
-const maxFreq = 6000;
-const maxVol = 0.05;
-const initialVol = 0.001;
 
-//volume.gain.value = initialVol;
-//volume.gain.minValue = initialVol;
-//volume.gain.maxValue = initialVol
+function loadSnare(){
+    let audio = new Audio("Hollow Direct Punchy Snare.wav");
 
+    let source= audioCtx.createBufferSource();
+    source.start(0);
+
+    source = audioCtx.createMediaElementSource(audio);
+
+    source.connect(audioCtx.destination);
+    audio.play();
+}
+function loadKick(){
+    // This creates and oscilator and a gain (volume) node
+    const kickOsc = audioCtx.createOscillator();
+    const primaryGainControl = audioCtx.createGain();
+
+    // Gradually change parameters  
+    kickOsc.frequency.setTargetAtTime(150,0);
+    kickOsc.frequency.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 0.5);
+
+    const kickGain = audioCtx.createGain();
+    kickGain.gain.setTargetAtTime(1,0);
+    kickGain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 0.5);
+    
+    // This connects the oscillator (out input) to the volume
+    // input and then to the output destination (our speakers)
+    kickOsc.connect(kickGain)
+    kickGain.connect(primaryGainControl);
+    kickOsc.start();
+    kickOsc.stop(audioCtx.currentTime + 0.5);
+
+}
 function droneAudio (){
     // This creates and oscilator and a gain (volume) node
        const osc = audioCtx.createOscillator();
+
+       const source = audioCtx.createBufferSource();
        const volume = audioCtx.createGain();
 
     // Select oscillator type (sine,triangle,square,saw)
@@ -86,9 +126,8 @@ function droneAudio (){
 
     // Determine the pitch of the audio  
        osc.frequency.value = 640;
-
-       //let leftTilt = parseFloat("leftTilt");
-       //let rightTilt = parseFloat("rightTilt");
+    
+    // Gradually change parameters   
        osc.frequency.exponentialRampToValueAtTime(720,audioCtx.currentTime +1);
        volume.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 0.9)
 
@@ -98,18 +137,12 @@ function droneAudio (){
     // input and then to the output destination (our speakers)
        osc.connect(volume).connect(audioCtx.destination);
 
+  
+       let oscTime = audioCtx.currentTime;
+       console.log(oscTime);
+
 }
-var startOffset = 0;
-var startTime = 0;
 
-function loadSnare(){
-    let audio = new Audio("Hollow Direct Punchy Snare.wav");
-    let source = audioCtx.createMediaElementSource(audio);
-
-    source.connect(audioCtx.destination);
-
-    audio.play();
-}
 startButton.addEventListener("click", function(){
     if(audioCtx.state === "suspended"){
         audioCtx.resume();
@@ -130,12 +163,18 @@ acl.addEventListener("reading", function(event){
         // This visualizes the values on the screen
 
         document.getElementById('x').innerHTML = 'x: ' + Math.abs(event.target.x);
-        document.getElementById('y').innerHTML = 'y: ' + event.target.y;
-        document.getElementById('z').innerHTML = 'z: ' + event.target.z;
+        document.getElementById('y').innerHTML = 'y: ' + Math.abs(event.target.y);
+        document.getElementById('z').innerHTML = 'z: ' + Math.abs(event.target.z);
 
         sendSensorData(checkPosition(event.target));
 
+
+        
+       let oscTime = audioCtx.currentTime;
+       oscTime = event.target;
     }
+
+    event
 });
 function isAtPosition(refPosition, newPosition){
 
@@ -151,13 +190,14 @@ function isSomeWhatEqual(num1, num2){
 
     // return absolute value because the api return 
     // values that have decimal points 
-    return (Math.abs(num1 -num2) <= offset);
-}
 
+    
+    return (Math.abs(num1 -num2) <= offset);
+
+}
  // This checks for the Position of the device sets and 
  // sets that position as the previous position and returns
  // value form the object that we freezed.
-
 function checkPosition(position){
 
     if(isAtPosition(position, referencePositions.origin)){
@@ -176,9 +216,17 @@ function checkPosition(position){
         previousPosition = referencePositions.upsideDown;
         return "upsideDown";
     }
+    if(isAtPosition(position,referencePositions.halfRightTilt)){
+        previousPosition = referencePositions.halfRightTilt;
+        return "halfRightTilt";
+    }
     if(isAtPosition(position,referencePositions.rightTilt)){
         previousPosition = referencePositions.rightTilt;
         return "rightTilt";
+    }
+    if(isAtPosition(position,referencePositions.halfLeftTilt)){
+        previousPosition = referencePositions.halfLeftTilt;
+        return "halfLeftTilt";
     }
     if(isAtPosition(position,referencePositions.leftTilt)){
         previousPosition = referencePositions.leftTilt;
@@ -195,8 +243,7 @@ function checkPosition(position){
 
     return ("ERROR: x:" + position.x + ", y: "+ position.y + ", z: " + position.z)
 }
- acl.start();
-
+acl.start();
 function sendSensorData(data){
     if(data.includes("ERROR")) return;
     

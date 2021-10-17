@@ -1,11 +1,42 @@
-.ball {
-  position: absolute;
-  top: 90px;
-  left: 90px;
-  width: 20px;
-  height: 20px;
-  background: green;
-  border-radius: 100%;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation Content */
+
+#Home {
+  background-color: #f1eecb;
+}
+.navContainer,
+.navContainer ul {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: space-evenly;
+}
+.listItem {
+  list-style-type: none;
+  margin: 25px;
+}
+.listItem a {
+  text-decoration: none;
+
+  color: #50445a;
+}
+
+/* Home Section Content */
+
+.projectHeader,
+.projectDescription {
+  text-align: center;
+  justify-content: center;
+}
+.projectHeader {
+  color: #a25e17;
+}
+.projectDescription {
+  color: #50445a;
 }
 .button-One {
   width: 50%;
@@ -14,4 +45,74 @@
   justify-content: center;
 
   transform: translateX(50%);
+
+  background-color: #a25e17;
+  opacity: 65%;
+
+  border-radius: 12px;
+}
+
+/* Features Section */
+
+#Features {
+  background-color: #29b8c9;
+
+  min-height: 450px;
+}
+header,
+.coordinatesHeader {
+  text-align: center;
+  justify-content: center;
+
+  margin: 20px;
+}
+header h2 {
+  color: #50445a;
+  font-size: 45px;
+}
+.coordinatesHeader {
+  color: #50445a;
+  font-size: 25px;
+}
+.coordinatesContainer {
+  padding: 25px;
+  margin-top: 45px;
+}
+.coordinatesContainer p {
+  text-align: center;
+  justify-content: center;
+}
+.coordinatesContainer h4 {
+  font-size: 25px;
+}
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-gap: 45px;
+}
+
+.card {
+  display: grid;
+  grid-template-rows: max-content 200px 1fr;
+
+  padding: 25px;
+}
+
+.card img {
+  width: 100%;
+  min-height: 50px;
+  max-height: 550px;
+}
+header h3 {
+  color: #f1eecb;
+}
+
+/* About Section */
+#About {
+  background-color: #50445a;
+
+  min-height: 285px;
+}
+.aboutHeader {
+  color: #29b8c9;
 }

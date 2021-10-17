@@ -9,17 +9,84 @@
     <title>Accelerometer Demo</title>
   </head>
   <body>
-    <header><h1>Accelerometer Demo</h1></header>
     <main>
-      <button class="button-One">Start</button>
-      <br />
-      <div class="container">
-        Example:
+      <section id="Home">
         <br />
-        <h2 id="x">X:</h2>
-        <h2 id="y">Y:</h2>
-        <h2 id="z">Z:</h2>
-      </div>
+        <header>
+          <nav class="navContainer">
+            <ul>
+              <li class="listItem"><a href="#Home">Home</a></li>
+              <li class="listItem"><a href="#Features">Features </a></li>
+              <li class="listItem"><a href="#About">About</a></li>
+            </ul>
+          </nav>
+        </header>
+        <header class="projectHeader"><h1>Project - Sgubhu</h1></header>
+        <br />
+        <p class="projectDescription">
+          A music creation web application that turns your motion gestures into beats.
+        </p>
+        <br />
+        <button class="button-One">Start</button>
+        <br />
+      </section>
+      <section id="Features">
+        <br />
+        <header><h2>Features:</h2></header>
+        <section class="cardsContainer">
+          <article class="card">
+            <header><h3>Lean Toward & Lean Away:</h3></header>
+            <img src="/Images/Gesture_Two.png" alt="An image of a Gesture" />
+          </article>
+          <article class="card">
+            <header><h3>Tilt Left & Right</h3></header>
+            <img src="/Images/Gesture_Three.png" alt="An image of a Gesture" />
+          </article>
+        </section>
+        <section class="coordinatesContainer">
+          <h3 class="coordinatesHeader">Coordinates:</h3>
+          <p>This is a representation of the values that the Accelerometer ouputs.
+            Although going forward, ideally i would like to have a more visual way of representing these values. 
+            Something in the vain of a speedometer or a compass like visuals
+          </p>
+          <br>
+          <br />
+          <h4 id="x">X:</h2>
+          <h4 id="y">Y:</h2>
+          <h4 id="z">Z:</h2>
+        </section>
+      </section>
+      <section id="About" style="height: 750px;">
+        <br />
+        <article class="aboutContent">
+          <header>
+            <h2 class="aboutHeader">About: Goals & Objectives</h2>
+            <br />
+            <p>
+              What i would like to achieve for this project is to make a product
+              that speaks to using alternative control schemes as a way to
+              create music with friends without the traditional means of
+              analogue instruments and midi. Instead the device itself (mobile
+              phone) and an online connection to this site will act as a pc
+              without the need of central pc. Therefore, users will have to be
+              connected to the website on their phones in order to use the
+              features of the app. This is because the project uses api's,
+              namely the Accelerometer and Web Audio Api to achieve my goals.
+              Api's are interfaces that offer a service to other pieces of
+              software, which in this case would be javascript. Therefore, by
+              using javascript and these services together (both of which are
+              native to web programming) it has allowed me to make the above
+              prototype.
+            </p>
+            <p>
+              The kind of auditory art that i seek to create with this project is synonymous
+              the performance art aspect of music. So, the kind would include users
+              casually jamming out together creating patterns and beats with the application
+            </p>
+          </header>
+        </article>
+      </section>
+      <br>
     </main>
   </body>
 </html>
