@@ -1,3 +1,4 @@
+//alert("Please use a mobile device to explore this site")
 //alert("Press start to start audio context")
 
 //Retrieve Html Elements:
@@ -8,7 +9,7 @@ const audioContext = window.AudioContext;
 const audioCtx = new AudioContext();
 
 // The following are reference positions found by debugging 
-// the accelerometer function on line 71
+// the accelerometer function on line 157
 const referencePositions = {
     origin      : {
         x: 0,
@@ -36,7 +37,7 @@ const referencePositions = {
         z:0
     },
     rightTilt   : {
-        x: -9.5,
+        x: -8,
         y: 0,
         z: 0
     },
@@ -46,19 +47,19 @@ const referencePositions = {
         z:0
     },
     leftTilt    : {
-        x: 9.5,
+        x: 8,
         y: 0,
         z: 0
     },
     leanAway    : {
         x: 0,
-        y: 7,
+        y: 8,
         z: 5
     },
     leanTowards : {
         x: 0,
         y: 7,
-        z: -5
+        z: 6
     },
 }
 
@@ -93,6 +94,17 @@ function loadSnare(){
     source.connect(audioCtx.destination);
     audio.play();
 }
+function loadHitHats(){
+    let audio = new Audio("Hollow Different Double Hat.wav");
+
+    let source= audioCtx.createBufferSource();
+    source.start(0);
+
+    source = audioCtx.createMediaElementSource(audio);
+
+    source.connect(audioCtx.destination);
+    audio.play();
+}
 function loadKick(){
     // This creates and oscilator and a gain (volume) node
     const kickOsc = audioCtx.createOscillator();
@@ -113,6 +125,18 @@ function loadKick(){
     kickOsc.start();
     kickOsc.stop(audioCtx.currentTime + 0.5);
 
+}
+function loadSample(){
+    
+    let audio = new Audio("Perfect Thick Warm Kick.wav");
+
+    let source= audioCtx.createBufferSource();
+    source.start(0);
+
+    source = audioCtx.createMediaElementSource(audio);
+
+    source.connect(audioCtx.destination);
+    audio.play();
 }
 function droneAudio (){
     // This creates and oscilator and a gain (volume) node
@@ -148,7 +172,7 @@ startButton.addEventListener("click", function(){
         audioCtx.resume();
     }
 
-    droneAudio();
+    loadKick();
 });
 
 // This function listens or rather uses the accelerometer api 
@@ -161,7 +185,6 @@ acl.addEventListener("reading", function(event){
     if(!isAtPosition(event.target, previousPosition)){
         
         // This visualizes the values on the screen
-
         document.getElementById('x').innerHTML = 'x: ' + Math.abs(event.target.x);
         document.getElementById('y').innerHTML = 'y: ' + Math.abs(event.target.y);
         document.getElementById('z').innerHTML = 'z: ' + Math.abs(event.target.z);
@@ -173,8 +196,6 @@ acl.addEventListener("reading", function(event){
        let oscTime = audioCtx.currentTime;
        oscTime = event.target;
     }
-
-    event
 });
 function isAtPosition(refPosition, newPosition){
 
@@ -248,9 +269,10 @@ function sendSensorData(data){
     if(data.includes("ERROR")) return;
     
     switch(data){
-        case "leftTilt": droneAudio();  console.log("audioTilt"); break; 
-        case "rightTilt": droneAudio(); console.log("audioTilt"); 
-        case "leanTowards": loadSnare(); console.log("Snare played"); break;
+        case "halfLeftTilt": loadSample();  console.log("audioTilt"); break; 
+        case "halfRightTilt": loadSnare(); console.log("audioTilt"); break;
+        case "leanAway ": loadHitHats(); console.log("hats played"); 
+        case "leanTowards": loadHitHats(); console.log("hats played"); break;
 
         default: break;
     }
