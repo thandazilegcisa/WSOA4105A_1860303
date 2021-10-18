@@ -172,7 +172,7 @@ startButton.addEventListener("click", function(){
         audioCtx.resume();
     }
 
-    loadKick();
+    droneAudio();
 });
 
 // This function listens or rather uses the accelerometer api 
