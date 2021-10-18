@@ -1,5 +1,5 @@
-//alert("Please use a mobile device to explore this site")
-//alert("Press start to start audio context")
+alert("Please use a mobile device to explore this site")
+alert("Press start to start audio context")
 
 //Retrieve Html Elements:
 const startButton = document.querySelector(".button-One");
