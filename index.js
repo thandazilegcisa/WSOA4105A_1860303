@@ -5,7 +5,7 @@ alert("Press start to start audio context")
 const startButton = document.querySelector(".button-One");
 
 // This creates a web audio api context
-const audioContext = window.AudioContext;
+const audioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
 // The following are reference positions found by debugging 
@@ -271,7 +271,7 @@ function sendSensorData(data){
     switch(data){
         case "halfLeftTilt": loadSample();  console.log("audioTilt"); break; 
         case "halfRightTilt": loadSnare(); console.log("audioTilt"); break;
-        case "leanAway ": loadHitHats(); console.log("hats played"); 
+        case "leanAway ": loadHitHats(); console.log("hats played"); break;
         case "leanTowards": loadHitHats(); console.log("hats played"); break;
 
         default: break;
