@@ -8,6 +8,70 @@ const startButton = document.querySelector(".button-One");
 const audioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
+//Retrieve Canvas Elements:
+const canvas = document.getElementById("canvas1");
+const ctx = canvas.getContext('2d');
+
+
+//Define Array Variable:
+let particlesArray=[];
+
+let mouse = {
+    x: undefined,
+    y: undefined
+}
+
+canvas.addEventListener("click", function(event){
+    mouse.x = event.x;
+    mouse.y = event.y;
+
+    console.log("hello");
+
+    for(let i=0; i<10; i++){
+        particlesArray.push(new Particle);
+    }
+})
+
+//Create Particle Object 
+class Particle{
+    constructor(color){
+        this.color = color;
+        this.x = Math.random() * canvas.width
+        this.y = Math.random() * canvas.height
+        this.size = Math.random() * 5 + 1
+        this.speedX = Math.random() * 3 - 1.5 
+        this.speedY = Math.random() * 3 - 1.5
+    }
+    update(){
+        this.x += this.speedX;
+        this.y += this.speedY;
+    }
+    drawCircles(){
+        ctx.beginPath();
+        ctx.arc(this.x,this.y, this.size, 0, Math.PI * 2)
+        ctx.fill();
+        ctx.fillStyle = this.color;
+
+    }
+}
+function instantiateParticles(){
+    for(let i = 0; i < particlesArray.length; i++){
+        particlesArray[i].update();
+        particlesArray[i].drawCircles();
+
+        if(particlesArray[i].size <= 0.3){
+            particlesArray.splice(i,1);
+            i--;
+        }
+    }
+}
+function animate(){
+    ctx.clearRect(0,0,canvas.width, canvas.height)
+    instantiateParticles();
+    requestAnimationFrame(animate);
+}
+animate();
+
 // The following are reference positions found by debugging 
 // the accelerometer function on line 157
 const referencePositions = {
@@ -37,7 +101,7 @@ const referencePositions = {
         z:0
     },
     rightTilt   : {
-        x: -8,
+        x: -5,
         y: 0,
         z: 0
     },
@@ -47,20 +111,30 @@ const referencePositions = {
         z:0
     },
     leftTilt    : {
-        x: 8,
+        x: 5,
         y: 0,
         z: 0
     },
     leanAway    : {
         x: 0,
-        y: 8,
-        z: 5
+        y: 5,
+        z: 11
     },
     leanTowards : {
         x: 0,
-        y: 7,
-        z: 6
+        y: 5,
+        z: -8
     },
+    leftSide: {
+        x:5,
+        y:-1,
+        z: 8
+    },
+    rightSide: {
+        x:-5,
+        y:1,
+        z:8
+    }
 }
 
 // Oject freeze, freeze's the properties of an objects so 
@@ -76,67 +150,91 @@ const phoneOrientations = Object.freeze({
     halfLeftTilt: 'halfLeftTilt',
     leftTilt    : 'leftTilt    ',
     leanTowards : 'leanTowards ',
-    leanAway    : 'leanAway    '
+    leanAway    : 'leanAway    ',
+    leftSide    : 'leftSide',
+    rightSide   : 'rightSide'
 });
 
 // Initialises the position of the phone to the origin position 
 let previousPosition = referencePositions.origin;
 
+let audio;
 
-function loadSnare(){
-    let audio = new Audio("Hollow Direct Punchy Snare.wav");
+fetch("./Sounds/Snare - 1.wav")
+.then(data => data.arrayBuffer())
+.then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+.then(decodedAudio => {audio = decodedAudio});
 
-    let source= audioCtx.createBufferSource();
-    source.start(0);
+function playback(){
+    const playSound = audioCtx.createBufferSource();
 
-    source = audioCtx.createMediaElementSource(audio);
+    playSound.buffer = audio;
+    playSound.connect(audioCtx.destination);
+    playSound.start(audioCtx.currentTime);
 
-    source.connect(audioCtx.destination);
-    audio.play();
+    for(let i=0; i<10; i++){
+        particlesArray.push(new Particle("red"));
+    }
 }
+
+let audio_Hat
+
+fetch("./Sounds/Hi-Hat - 1.wav")
+.then(data_Hat => data_Hat.arrayBuffer())
+.then(arrayBuffer_Hat => audioCtx.decodeAudioData(arrayBuffer_Hat))
+.then(decodedAudio_Hat => {audio_Hat = decodedAudio_Hat});
+
 function loadHitHats(){
-    let audio = new Audio("Hollow Different Double Hat.wav");
+      const playHat = audioCtx.createBufferSource();
 
-    let source= audioCtx.createBufferSource();
-    source.start(0);
+      playHat.buffer = audio_Hat;
+      playHat.connect(audioCtx.destination);
+      playHat.start(audioCtx.currentTime);
 
-    source = audioCtx.createMediaElementSource(audio);
-
-    source.connect(audioCtx.destination);
-    audio.play();
+      for(let i=0; i<10; i++){
+        particlesArray.push(new Particle("purple"));
+    }
 }
+
+let audio_Kick
+
+fetch("./Sounds/Kick - 1.wav")
+.then(data_Kick => data_Kick.arrayBuffer())
+.then(arrayBuffer_Kick => audioCtx.decodeAudioData(arrayBuffer_Kick))
+.then(decodedAudio_Kick => {audio_Kick = decodedAudio_Kick});
+
 function loadKick(){
-    // This creates and oscilator and a gain (volume) node
-    const kickOsc = audioCtx.createOscillator();
-    const primaryGainControl = audioCtx.createGain();
 
-    // Gradually change parameters  
-    kickOsc.frequency.setTargetAtTime(150,0);
-    kickOsc.frequency.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 0.5);
+    const playKick = audioCtx.createBufferSource();
 
-    const kickGain = audioCtx.createGain();
-    kickGain.gain.setTargetAtTime(1,0);
-    kickGain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 0.5);
-    
-    // This connects the oscillator (out input) to the volume
-    // input and then to the output destination (our speakers)
-    kickOsc.connect(kickGain)
-    kickGain.connect(primaryGainControl);
-    kickOsc.start();
-    kickOsc.stop(audioCtx.currentTime + 0.5);
+    playKick.buffer = audio_Kick;
+    playKick.connect(audioCtx.destination);
+    playKick.start(audioCtx.currentTime);
+
+    for(let i=0; i<10; i++){
+        particlesArray.push(new Particle("green"));
+    }
 
 }
-function loadSample(){
-    
-    let audio = new Audio("Perfect Thick Warm Kick.wav");
 
-    let source= audioCtx.createBufferSource();
-    source.start(0);
+let audio_Shaker
 
-    source = audioCtx.createMediaElementSource(audio);
+fetch("./Sounds/Shaker - 2.wav")
+.then(data_Shaker  => data_Shaker.arrayBuffer())
+.then(arrayBuffer_Shaker => audioCtx.decodeAudioData(arrayBuffer_Shaker))
+.then(decodedAudio_Shaker => {audio_Shaker = decodedAudio_Shaker});
 
-    source.connect(audioCtx.destination);
-    audio.play();
+function loadShaker(){
+
+    const playShaker = audioCtx.createBufferSource();
+
+    playShaker.buffer = audio_Shaker;
+    playShaker.connect(audioCtx.destination)
+    playShaker.start(audioCtx.currentTime);
+
+    for(let i=0; i<10; i++){
+        particlesArray.push(new Particle("blue"));
+    }
 }
 function droneAudio (){
     // This creates and oscilator and a gain (volume) node
@@ -185,18 +283,16 @@ acl.addEventListener("reading", function(event){
     if(!isAtPosition(event.target, previousPosition)){
         
         // This visualizes the values on the screen
-        document.getElementById('x').innerHTML = 'x: ' + Math.abs(event.target.x);
-        document.getElementById('y').innerHTML = 'y: ' + Math.abs(event.target.y);
-        document.getElementById('z').innerHTML = 'z: ' + Math.abs(event.target.z);
+        document.getElementById('x').innerHTML = 'x: ' + Math.floor(event.target.x);
+        document.getElementById('y').innerHTML = 'y: ' + Math.floor(event.target.y);
+        document.getElementById('z').innerHTML = 'z: ' + Math.floor(event.target.z);
 
         sendSensorData(checkPosition(event.target));
 
-
         
-       let oscTime = audioCtx.currentTime;
-       oscTime = event.target;
     }
 });
+
 function isAtPosition(refPosition, newPosition){
 
     return( 
@@ -207,12 +303,9 @@ function isAtPosition(refPosition, newPosition){
 }
 
 function isSomeWhatEqual(num1, num2){
-    let offset = 4.5;
-
+    let offset = 5;
     // return absolute value because the api return 
     // values that have decimal points 
-
-    
     return (Math.abs(num1 -num2) <= offset);
 
 }
@@ -261,6 +354,14 @@ function checkPosition(position){
         previousPosition = referencePositions.leanAway;
         return "leanAway";
     }
+    if(isAtPosition(position,referencePositions.leftSide)){
+        previousPosition = referencePositions.leftSide;
+        return "leftSide";
+    }
+    if(isAtPosition(position,referencePositions.rightSide)){
+        previousPosition = referencePositions.rightSide;
+        return "rightSide";
+    }
 
     return ("ERROR: x:" + position.x + ", y: "+ position.y + ", z: " + position.z)
 }
@@ -269,10 +370,12 @@ function sendSensorData(data){
     if(data.includes("ERROR")) return;
     
     switch(data){
-        case "halfLeftTilt": loadSample();  console.log("audioTilt"); break; 
-        case "halfRightTilt": loadSnare(); console.log("audioTilt"); break;
-        case "leanAway ": loadHitHats(); console.log("hats played"); break;
+        case "halfLeftTilt": loadKick();  console.log("audio_Kick"); break; 
+        case "halfRightTilt": playback(); console.log("audio_Snare"); break;
+        case "leanAway": loadHitHats(); console.log("hats played"); break;
         case "leanTowards": loadHitHats(); console.log("hats played"); break;
+        case "leftSide": loadShaker(); console.log("shaker played"); break;
+        case "rightSide": loadShaker(); console.log("shaker played"); break;
 
         default: break;
     }

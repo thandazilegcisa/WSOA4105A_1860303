@@ -66,6 +66,12 @@ header,
 
   margin: 20px;
 }
+#compass {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-evenly;
+}
 header h2 {
   color: #50445a;
   font-size: 45px;
@@ -115,4 +121,8 @@ header h3 {
 }
 .aboutHeader {
   color: #29b8c9;
+}
+#canvas1 {
+  margin: 0;
+  padding: 0;
 }
