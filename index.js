@@ -109,7 +109,7 @@ const referencePositions = {
         z:0
     },
     rightTilt   : {
-        x: -5,
+        x: -10,
         y: 0,
         z: 0
     },
@@ -119,19 +119,19 @@ const referencePositions = {
         z:0
     },
     leftTilt    : {
-        x: 5,
+        x: 10,
         y: 0,
         z: 0
     },
     leanAway    : {
         x: 0,
-        y: 5,
-        z: 11
+        y: 7,
+        z: 5
     },
     leanTowards : {
         x: 0,
-        y: 5,
-        z: -8
+        y: 7,
+        z: -5
     },
     leftSide: {
         x:3,
@@ -394,15 +394,30 @@ acl.start();
 function sendSensorData(data){
 
     if(data.includes("ERROR")) return;
-    
+
     switch(data){
         case "halfLeftTilt": loadKick();  console.log("audio_Kick"); break; 
         case "halfRightTilt": playback(); console.log("audio_Snare"); break;
         case "leanAway": loadHitHats(); console.log("hats played"); break;
         case "leanTowards": loadHitHats(); console.log("hats played"); break;
+        /*
         case "leftSide": loadShaker(); console.log("shaker played"); break;
         case "rightSide": loadShaker(); console.log("shaker played"); break;
-
+        */
         default: break;
     }
 }
+
+
+const shakeThreshold = 25;
+
+let sensor = new LinearAccelerationSensor({frequency: 60});
+
+sensor.addEventListener("reading", () => {
+    if(sensor.x > shakeThreshold){
+        console.log("shake Detected")
+        loadShaker();
+    }
+})
+
+sensor.start();
