@@ -16,8 +16,6 @@ const ctx = canvas.getContext('2d');
 
 window.addEventListener("click" , function(e){
     document.documentElement.webkitRequestFullScreen();
-    document.documentElement.mozRequestFullScreen();
-    document.documentElement.msRequestFullScreen();
     screen.orientation.lock("portrait");
 })
 
@@ -111,7 +109,7 @@ const referencePositions = {
     rightTilt   : {
         x: -10,
         y: 0,
-        z: 0
+        z: 1
     },
     halfLeftTilt: {
         x:5,
@@ -119,9 +117,9 @@ const referencePositions = {
         z:0
     },
     leftTilt    : {
-        x: 10,
+        x: 9,
         y: 0,
-        z: 0
+        z: -1
     },
     leanAway    : {
         x: 0,
@@ -186,7 +184,6 @@ function playback(){
 
     let fetchFeatures = document.getElementById("Features")
     fetchFeatures.style.backgroundColor = "red";
-    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
 }
 
 let audio_Hat;
@@ -209,7 +206,6 @@ function loadHitHats(){
 
     let fetchFeatures = document.getElementById("Features")
     fetchFeatures.style.backgroundColor = "purple";
-    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
 }
 
 let audio_Kick;
@@ -233,7 +229,6 @@ function loadKick(){
 
     let fetchFeatures = document.getElementById("Features")
     fetchFeatures.style.backgroundColor = "green";
-    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
 
 }
 
@@ -258,7 +253,6 @@ function loadShaker(){
 
     let fetchFeatures = document.getElementById("Features")
     fetchFeatures.style.backgroundColor = "blue";
-    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
 }
 function droneAudio (){
     // This creates and oscilator and a gain (volume) node
@@ -298,7 +292,7 @@ startButton.addEventListener("click", function(){
 });
 
 // This function listens or rather uses the accelerometer api 
-let acl = new Accelerometer();
+let acl = new Accelerometer({frequency: 60});
 acl.addEventListener("reading", function(event){
 
     // This condition checks if  the event that we are listening
@@ -329,7 +323,7 @@ function isSomeWhatEqual(num1, num2){
     let offset = 2.5;
     // return absolute value because the api return 
     // values that have decimal points 
-    return (Math.abs(num1 - num2) <= offset);
+    return Math.floor(Math.abs(num1 - num2) <= offset);
 
 }
  // This checks for the Position of the device sets and 
@@ -374,7 +368,7 @@ function checkPosition(position){
         previousPosition = referencePositions.leanTowards;
         return "leanTowards";
     }
-    if(isAtPosition(position,referencePositions.leanAway)){
+    if(isAtPosition(position,referencePositions.leanAway && previousPosition != referencePositions.origin)){
         previousPosition = referencePositions.leanAway;
         return "leanAway";
     }
@@ -396,8 +390,8 @@ function sendSensorData(data){
     if(data.includes("ERROR")) return;
 
     switch(data){
-        case "halfLeftTilt": loadKick();  console.log("audio_Kick"); break; 
-        case "halfRightTilt": playback(); console.log("audio_Snare"); break;
+        case "leftTilt": loadKick();  console.log("audio_Kick"); break;
+        case "rightTilt": playback(); console.log("audio_Snare"); break;
         case "leanAway": loadHitHats(); console.log("hats played"); break;
         case "leanTowards": loadHitHats(); console.log("hats played"); break;
         /*
@@ -408,9 +402,7 @@ function sendSensorData(data){
     }
 }
 
-
 const shakeThreshold = 25;
-
 let sensor = new LinearAccelerationSensor({frequency: 60});
 
 sensor.addEventListener("reading", () => {
@@ -419,5 +411,5 @@ sensor.addEventListener("reading", () => {
         loadShaker();
     }
 })
+sensor.start(); 
 
-sensor.start();
