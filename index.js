@@ -1,5 +1,5 @@
-alert("Please use a mobile device to explore this site")
-alert("Press start to start audio context")
+alert("Please use a mobile device to explore this site");
+alert("Press start to start audio context");
 
 //Retrieve Html Elements:
 const startButton = document.querySelector(".button-One");
@@ -12,6 +12,14 @@ const audioCtx = new AudioContext();
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext('2d');
 
+// Set window to fullscreen and lock window to portrait:
+
+window.addEventListener("click" , function(e){
+    document.documentElement.webkitRequestFullScreen();
+    document.documentElement.mozRequestFullScreen();
+    document.documentElement.msRequestFullScreen();
+    screen.orientation.lock("portrait");
+})
 
 //Define Array Variable:
 let particlesArray=[];
@@ -126,14 +134,14 @@ const referencePositions = {
         z: -8
     },
     leftSide: {
-        x:5,
-        y:-1,
-        z: 8
+        x:3,
+        y:2,
+        z:9
     },
     rightSide: {
-        x:-5,
+        x:0,
         y:1,
-        z:8
+        z:10
     }
 }
 
@@ -175,9 +183,13 @@ function playback(){
     for(let i=0; i<10; i++){
         particlesArray.push(new Particle("red"));
     }
+
+    let fetchFeatures = document.getElementById("Features")
+    fetchFeatures.style.backgroundColor = "red";
+    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
 }
 
-let audio_Hat
+let audio_Hat;
 
 fetch("./Sounds/Hi-Hat - 1.wav")
 .then(data_Hat => data_Hat.arrayBuffer())
@@ -194,9 +206,13 @@ function loadHitHats(){
       for(let i=0; i<10; i++){
         particlesArray.push(new Particle("purple"));
     }
+
+    let fetchFeatures = document.getElementById("Features")
+    fetchFeatures.style.backgroundColor = "purple";
+    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
 }
 
-let audio_Kick
+let audio_Kick;
 
 fetch("./Sounds/Kick - 1.wav")
 .then(data_Kick => data_Kick.arrayBuffer())
@@ -215,9 +231,13 @@ function loadKick(){
         particlesArray.push(new Particle("green"));
     }
 
+    let fetchFeatures = document.getElementById("Features")
+    fetchFeatures.style.backgroundColor = "green";
+    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
+
 }
 
-let audio_Shaker
+let audio_Shaker;
 
 fetch("./Sounds/Shaker - 2.wav")
 .then(data_Shaker  => data_Shaker.arrayBuffer())
@@ -235,6 +255,10 @@ function loadShaker(){
     for(let i=0; i<10; i++){
         particlesArray.push(new Particle("blue"));
     }
+
+    let fetchFeatures = document.getElementById("Features")
+    fetchFeatures.style.backgroundColor = "blue";
+    fetchFeatures.style.transition.backgroundColor = "100ms Linear";
 }
 function droneAudio (){
     // This creates and oscilator and a gain (volume) node
@@ -276,7 +300,7 @@ startButton.addEventListener("click", function(){
 // This function listens or rather uses the accelerometer api 
 let acl = new Accelerometer();
 acl.addEventListener("reading", function(event){
-    
+
     // This condition checks if  the event that we are listening
     // for is not the same as the previous position (origin, and 
     // every other position thereafter)
@@ -287,9 +311,7 @@ acl.addEventListener("reading", function(event){
         document.getElementById('y').innerHTML = 'y: ' + Math.floor(event.target.y);
         document.getElementById('z').innerHTML = 'z: ' + Math.floor(event.target.z);
 
-        sendSensorData(checkPosition(event.target));
-
-        
+        sendSensorData(checkPosition(event.target));  
     }
 });
 
@@ -303,15 +325,17 @@ function isAtPosition(refPosition, newPosition){
 }
 
 function isSomeWhatEqual(num1, num2){
-    let offset = 5;
+
+    let offset = 2.5;
     // return absolute value because the api return 
     // values that have decimal points 
-    return (Math.abs(num1 -num2) <= offset);
+    return (Math.abs(num1 - num2) <= offset);
 
 }
  // This checks for the Position of the device sets and 
  // sets that position as the previous position and returns
  // value form the object that we freezed.
+
 function checkPosition(position){
 
     if(isAtPosition(position, referencePositions.origin)){
@@ -366,7 +390,9 @@ function checkPosition(position){
     return ("ERROR: x:" + position.x + ", y: "+ position.y + ", z: " + position.z)
 }
 acl.start();
+
 function sendSensorData(data){
+
     if(data.includes("ERROR")) return;
     
     switch(data){

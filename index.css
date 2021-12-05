@@ -126,3 +126,6 @@ header h3 {
   margin: 0;
   padding: 0;
 }
+.aboutContent p {
+  color: #f1eecb;
+}
