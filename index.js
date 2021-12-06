@@ -188,7 +188,7 @@ function playback(){
 
 let audio_Hat;
 
-fetch("./Sounds/Hi-Hat - 1.wav")
+fetch("./Sounds/Hi-hat - 1.wav")
 .then(data_Hat => data_Hat.arrayBuffer())
 .then(arrayBuffer_Hat => audioCtx.decodeAudioData(arrayBuffer_Hat))
 .then(decodedAudio_Hat => {audio_Hat = decodedAudio_Hat});
@@ -320,7 +320,7 @@ function isAtPosition(refPosition, newPosition){
 
 function isSomeWhatEqual(num1, num2){
 
-    let offset = 2.5;
+    let offset = 4.5;
     // return absolute value because the api return 
     // values that have decimal points 
     return Math.floor(Math.abs(num1 - num2) <= offset);
