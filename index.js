@@ -234,7 +234,7 @@ function loadKick(){
 
 let audio_Shaker;
 
-fetch("./Sounds/Shaker - 2.wav")
+fetch("./Sounds/Shaker - 1.wav")
 .then(data_Shaker  => data_Shaker.arrayBuffer())
 .then(arrayBuffer_Shaker => audioCtx.decodeAudioData(arrayBuffer_Shaker))
 .then(decodedAudio_Shaker => {audio_Shaker = decodedAudio_Shaker});
@@ -402,7 +402,7 @@ function sendSensorData(data){
     }
 }
 
-const shakeThreshold = 25;
+const shakeThreshold = 15;
 let sensor = new LinearAccelerationSensor({frequency: 60});
 
 sensor.addEventListener("reading", () => {
