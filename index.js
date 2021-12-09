@@ -301,9 +301,9 @@ acl.addEventListener("reading", function(event){
     if(!isAtPosition(event.target, previousPosition)){
         
         // This visualizes the values on the screen
-        document.getElementById('x').innerHTML = 'x: ' + Math.floor(event.target.x);
-        document.getElementById('y').innerHTML = 'y: ' + Math.floor(event.target.y);
-        document.getElementById('z').innerHTML = 'z: ' + Math.floor(event.target.z);
+        //document.getElementById('x').innerHTML = 'x: ' + Math.floor(event.target.x);
+        //document.getElementById('y').innerHTML = 'y: ' + Math.floor(event.target.y);
+        //document.getElementById('z').innerHTML = 'z: ' + Math.floor(event.target.z);
 
         sendSensorData(checkPosition(event.target));  
     }
@@ -320,7 +320,7 @@ function isAtPosition(refPosition, newPosition){
 
 function isSomeWhatEqual(num1, num2){
 
-    let offset = 4.5;
+    let offset = 2.5;
     // return absolute value because the api return 
     // values that have decimal points 
     return Math.floor(Math.abs(num1 - num2) <= offset);
