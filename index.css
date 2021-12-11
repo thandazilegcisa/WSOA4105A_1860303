@@ -79,6 +79,7 @@ header h2 {
 .coordinatesHeader {
   color: #50445a;
   font-size: 25px;
+  transform: translateY(120%);
 }
 .coordinatesContainer {
   padding: 25px;
@@ -128,4 +129,8 @@ header h3 {
 }
 .aboutContent p {
   color: #f1eecb;
+}
+.videoDemo {
+  margin: 25px;
+  transform: translateX(35%);
 }
